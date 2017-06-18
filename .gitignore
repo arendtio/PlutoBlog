@@ -4,3 +4,11 @@
 !02_posts/.keepme
 settings.txt
 ./logo.svg
+
+04_blog/posts/*
+!04_blog/posts/.keepme
+04_blog/img/logo.svg
+04_blog/index.html
+04_blog/posts.json
+04_blog/rss.xml
+04_blog/.git
