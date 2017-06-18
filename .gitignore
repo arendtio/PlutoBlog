@@ -1,0 +1,6 @@
+01_drafts/*
+!01_drafts/.keepme
+02_posts/*
+!02_posts/.keepme
+settings.txt
+./logo.svg

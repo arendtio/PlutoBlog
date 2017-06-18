@@ -1,0 +1,62 @@
+<post>
+	<div class="sd-content">
+
+		<raw if="{fetched}" html="{md2html(md, file)}"/>
+		<div if="{ ! fetched}" class="spinner"></div>
+	</div>
+
+	<script>
+	var tag = this;
+	tag.file = undefined;
+	tag.md="";
+	tag.fetched = false;
+
+	tag.on("mount", function() {
+		tag.update();
+	});
+	tag.on("update", function() {
+		if(tag.file === undefined) {
+			tag.file = opts.file;
+			// fetch
+			var request = new XMLHttpRequest();
+			request.open("GET", "posts/"+tag.file, true);
+
+			request.onload = function() {
+				if (request.status >= 200 && request.status < 400) {
+					// Success!
+					tag.md = request.responseText;
+					tag.fetched = true;
+					tag.update();
+				} else {
+					console.log(request)
+					tag.file = undefined;
+				}
+			};
+
+			request.onerror = function() {
+				console.log(request)
+				tag.file = undefined;
+			};
+
+			request.send();
+		}
+	});
+	tag.on("updated", function() {
+		// start highlightjs again
+		els = tag.root.getElementsByTagName("code");
+		for(var i=0; i<els.length; i++) {
+			hljs.highlightBlock(els[i]);
+		}
+	});
+
+	RiotControl.on("page_changed", function() {
+		// TODO: add spinner?
+
+
+	});
+	</script>
+
+	<style>
+	</style>
+</post>
+

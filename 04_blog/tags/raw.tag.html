@@ -1,0 +1,21 @@
+<raw>
+	<div></div>
+
+	<script>
+	var tag = this;
+
+  	tag.set = function() {
+		this.root.childNodes[0].innerHTML = opts.html
+	}
+	tag.on("mount", function() {
+		tag.set();
+	});
+	tag.on("update", function() {
+		tag.set();
+	});
+	</script>
+
+	<style>
+	</style>
+</raw>
+

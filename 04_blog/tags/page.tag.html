@@ -1,0 +1,82 @@
+<page>
+	<div if="{ current || next }" class="page { current ? 'current' : '' } { next ? 'next' : '' }">
+		<div class="page-content">
+		<yield/>
+		</div>
+	</div>
+
+	<script>
+	var tag = this;
+
+	tag.pattern = opts.pattern
+	tag.url = opts.url
+	tag.name = tag.pattern.replace(/\[[^\]]*\]/g, "");
+	tag.segments = tag.pattern.split("/");
+	tag.current = false;
+	tag.next = false;
+
+	tag.on("mount", function() {
+		debug.log("tag-updates", 1, "page-tag mount");
+		RiotControl.trigger("register_page", tag.pattern);
+	});
+	tag.on("update", function() {
+		debug.log("tag-updates", 1, "page-tag update");
+	});
+
+	RiotControl.on("prepare_page_change", function(currentUrl, targetUrl) {
+		tag.next = tag.patternMatchesUrl(targetUrl);
+		tag.current = false;
+		if( (! tag.next) && currentUrl !== undefined ) {
+			tag.current = tag.patternMatchesUrl(currentUrl);
+		}
+
+		// disable updates of the current page during transition
+		// optimization:
+		//tag.shouldUpdate = function() { return ( ! tag.current); }
+
+		if( tag.next ) {
+			RiotControl.trigger("answer_target_pagename", tag.name, tag.pattern, targetUrl);
+		}
+	});
+
+	tag.patternMatchesUrl = function(url) {
+
+		// we compare the url in decoded state as some RSS readers (e.g. Akregator)
+		// think it is a good idea to replace %20 with spaces in the url
+		if(tag.url !== undefined && decodeURI(tag.url) !== decodeURI(url)) {
+			return false;
+		}
+
+		// check if the new url is the url of this page
+		var urlSegments = url.split("/");
+
+		// quickcheck of the length does even
+		if(urlSegments.length !== tag.segments.length) {
+			return false;
+		}
+
+		for(var i=0; i<tag.segments.length; i++) {
+			// the segment is a dynmaic just skip to the next
+			if(tag.segments[i][0] === "[") {
+				continue;
+			}
+
+			if(tag.segments[i] !== urlSegments[i]) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+	</script>
+
+	<style>
+		.page {
+			display: none;
+			width: 100%;
+		}
+		.page.current {
+			display: block;
+		}
+	</style>
+</page>

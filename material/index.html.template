@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+	<meta name="author" content="[Author]">
+	<meta name="description" content="[Description]">
+	<!--
+	Customize this policy to fit your own app's needs. For more guidance, see:
+		https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+	Some notes:
+		* gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+		* https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+		* Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+			* Enable inline JS: add 'unsafe-inline' to default-src
+	-->
+	<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:; connect-src *;script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.polyfill.io/v2/polyfill.min.js;">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+	<meta name="theme-color" content="#1284a1"><!-- Chrome, Firefox OS and Opera -->
+	<meta name="msapplication-navbutton-color" content="#1284a1"><!-- Windows Phone -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#1284a1"><!-- iOS Safari -->
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<!--<link href="https://fonts.googleapis.com/css?family=Amiri:400,400i,700,700i|Lato:400,700,700i" rel="stylesheet">-->
+	<link rel="alternate" type="application/rss+xml" href="rss.xml" title="[RSS Feed Title]">
+    <title>[Pluto Blog Title]</title>
+
+	<link rel="stylesheet" href="css/highlightjs/default.css">
+	<script src="js/highlight.pack.js"></script>
+  </head>
+  <body>
+	<link rel="stylesheet" href="css/app.css">
+	<!-- self closing <app/> not supported inside body -->
+	<app></app>
+
+	<script type="text/javascript" src="js/getjson.js"></script>
+	<script type="text/javascript" src="js/helper.js"></script>
+	<script type="text/javascript" src="js/debug.js"></script>
+	<script type="text/javascript" src="js/velocity.min.js"></script>
+	<script type="text/javascript" src="js/showdown.min.js"></script>
+	<script type="text/javascript" src="js/showdown-wrapper.js"></script>
+
+	<script type="text/javascript" src="js/riot+compiler.min.js"></script>
+	<script src="js/route.min.js"></script>
+	<script src="js/riotcontrol.js"></script>
+
+	<script src="tags/app.tag.html" type="riot/tag"></script>
+	<script src="tags/pages.tag.html" type="riot/tag"></script>
+	<script src="tags/page.tag.html" type="riot/tag"></script>
+	<script src="tags/post.tag.html" type="riot/tag"></script>
+	<script src="tags/raw.tag.html" type="riot/tag"></script>
+
+	<script src="stores/app.store.js"></script>
+	<script src="stores/router.store.js"></script>
+	<script src="js/init-app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+<pages>
+	<div class="pages">
+		<yield/>
+	</div>
+
+	<script>
+	var tag = this;
+
+	tag.on("mount", function() {
+		debug.log("tag-updates", 1, "pages-tag mount");
+	});
+	tag.on("update", function() {
+		debug.log("tag-updates", 1, "pages-tag update");
+	});
+
+	tag.on("updated", function() {
+		RiotControl.trigger("pages_updated");
+	});
+
+	RiotControl.on("update_pages", function() {
+		tag.update();
+	});
+
+	</script>
+
+	<style>
+		.pages {
+			position: relative;
+			overflow: hidden;
+		}
+	</style>
+</pages>
+

@@ -1,0 +1,4 @@
+Title: Best Blog in Town
+Author: It's Me
+Description: Almost a Blog
+Url: http://blog.example.com
