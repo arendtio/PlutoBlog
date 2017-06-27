@@ -5,14 +5,17 @@
 	var tag = this;
 
   	tag.set = function() {
-		this.root.childNodes[0].innerHTML = opts.html
+		tag.root.childNodes[0].innerHTML = opts.html
 	}
 	tag.on("mount", function() {
+		debug.log("tag-updates", 1, "raw-tag mount");
 		tag.set();
 	});
 	tag.on("update", function() {
+		debug.log("tag-updates", 1, "raw-tag update");
 		tag.set();
 	});
+
 	</script>
 
 	<style>

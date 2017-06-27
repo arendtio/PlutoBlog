@@ -1,7 +1,6 @@
 <app class="m-app">
 	<header>
-		<a href="#home">Home</a>
-		<a if="{ nextPostFile != undefined }"  href="#posts/{encodeURIComponent(nextPostFile)}">Next Post</a>
+		<header-buttons/>
 	</header>
 	<pages>
 		<page pattern="home">
@@ -178,38 +177,37 @@
 	});
 
 	tag.on("update", function() {
-		debug.log("tag-updates", 1, "app-tag update");
+		debug.log("tag-updates", 1, "APP-TAG UPDATE");
 	});
 
 	tag.on("updated", function() {
-		if( tag.mountComplete && tag.index !== undefined){
-			if( ! tag.routerStarted){
-				tag.routerStarted = true;
-				tag.startRouter();
-			}
-		}
+		tag.routerStarter();
 	});
 
 	RiotControl.on("postindex_changed", function(index) {
 		tag.index = index;
 		tag.update();
 	});
+
 	RiotControl.on("init_mount_complete", function() {
 		tag.mountComplete = true;
-		tag.update();
+		tag.routerStarter();
 	});
+
 	RiotControl.on("prepare_page_change", function(currentUrl, targetUrl) {
 		RiotControl.trigger("url_change", currentUrl, targetUrl);
 	});
 
-	RiotControl.on("next_post_changed", function(file) {
-		tag.nextPostFile = file;
-		tag.update();
-	});
+	tag.routerStarter = function() {
+		if( tag.mountComplete && tag.index !== undefined){
+			if( ! tag.routerStarted){
+				tag.routerStarted = true;
 
-	tag.startRouter = function(){
-		RiotControl.trigger("register_animation_controller", tag.animationController);
-		RiotControl.trigger("start_router", "home");
+				// start router
+				RiotControl.trigger("register_animation_controller", tag.animationController);
+				RiotControl.trigger("start_router", "home");
+			}
+		}
 	}
 	</script>
 

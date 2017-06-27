@@ -12,9 +12,11 @@
 	tag.fetched = false;
 
 	tag.on("mount", function() {
+		debug.log("tag-updates", 1, "post-tag mount");
 		tag.update();
 	});
 	tag.on("update", function() {
+		debug.log("tag-updates", 1, "post-tag update");
 		if(tag.file === undefined) {
 			tag.file = opts.file;
 			// fetch
@@ -42,18 +44,16 @@
 		}
 	});
 	tag.on("updated", function() {
+		debug.log("tag-updates", 1, "post-tag updateD");
+		tag.initHighlight();
+	});
+	tag.initHighlight = function() {
 		// start highlightjs again
-		els = tag.root.getElementsByTagName("code");
+		els = tag.root.querySelectorAll("pre");
 		for(var i=0; i<els.length; i++) {
 			hljs.highlightBlock(els[i]);
 		}
-	});
-
-	RiotControl.on("page_changed", function() {
-		// TODO: add spinner?
-
-
-	});
+	}
 	</script>
 
 	<style>

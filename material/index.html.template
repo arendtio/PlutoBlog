@@ -43,6 +43,7 @@
 	<script src="js/riotcontrol.js"></script>
 
 	<script src="tags/app.tag.html" type="riot/tag"></script>
+	<script src="tags/header-buttons.tag.html" type="riot/tag"></script>
 	<script src="tags/pages.tag.html" type="riot/tag"></script>
 	<script src="tags/page.tag.html" type="riot/tag"></script>
 	<script src="tags/post.tag.html" type="riot/tag"></script>
