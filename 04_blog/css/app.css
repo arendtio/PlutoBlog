@@ -124,6 +124,13 @@ header a:first-child {
 	/*letter-spacing: -0.01em;*/
 	line-height: 1.6em;
 }
+
+.sd-content p code {
+	padding: 2px 4px;
+	border-radius: 5px;
+	background: #eaeaea;
+}
+
 .sd-content > raw > div > div,
 .sd-content > raw > div > p > div {
 	margin: 1em -8.5% 1.6em -8.5%;
