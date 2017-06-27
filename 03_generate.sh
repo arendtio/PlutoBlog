@@ -77,6 +77,15 @@ function rawurlencode {
 	echo "${encoded}"
 }
 
+function randomUUID {
+	if [ -e /proc/sys/kernel/random/uuid ]; then
+		cat /proc/sys/kernel/random/uuid
+	else
+		# https://serverfault.com/questions/103359/how-to-create-a-uuid-in-bash
+		od -x /dev/urandom | head -1 | awk '{OFS="-"; print $2$3,$4,$5,$6,$7$8$9}'
+	fi
+}
+
 settingsTitle="$(getSetting "Title")"
 settingsAuthor="$(getSetting "Author")"
 settingsDescription="$(getSetting "Description")"
@@ -154,6 +163,11 @@ for f in $(ls -t "02_posts/"); do
 		date="$(date --utc +%FT%TZ -d @$timestamp)"
 		echo "date: $date" >> "$metaFile"
 	fi
+	uuid="$(getMeta "$metaFile" "uuid")"
+	if [ "$uuid" == "" ]; then
+		uuid="$(randomUUID)"
+		echo "uuid: $uuid" >> "$metaFile"
+	fi
 
 	# index
 	echo -n '	{
@@ -171,6 +185,7 @@ for f in $(ls -t "02_posts/"); do
 		<title>'"$title"'</title>
 		<link>'"$link"'</link>
 		<description>'"$description"'</description>
+		<guid>'"$uuid"'</guid>
 	</item>' >> $rssFile
 done
 IFS="$SAVEIFS"
