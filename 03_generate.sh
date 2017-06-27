@@ -185,7 +185,7 @@ for f in $(ls -t "02_posts/"); do
 		<title>'"$title"'</title>
 		<link>'"$link"'</link>
 		<description>'"$description"'</description>
-		<guid>'"$uuid"'</guid>
+		<guid isPermaLink="false">'"$uuid"'</guid>
 	</item>' >> $rssFile
 done
 IFS="$SAVEIFS"
