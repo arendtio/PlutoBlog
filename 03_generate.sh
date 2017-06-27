@@ -54,6 +54,12 @@ function getSetting {
 	grep -i "$settingName" "$settingsFile" | cut -d: -f2- | sed 's/^[ \t]\+//'
 }
 
+function getMeta {
+	metaFile="$1"
+	optionName="$2"
+	grep -e "^$optionName:" "$metaFile" | cut -d: -f2- | sed 's/^[ \t]\+//'
+}
+
 function rawurlencode {
 	local string="${1}"
 	local strlen=${#string}
@@ -113,6 +119,11 @@ SAVEIFS="$IFS"
 IFS="$(echo -en "\n\b")"
 first="true";
 for f in $(ls -t "02_posts/"); do
+	# skipping *.meta files
+	if [[ ! -d "02_posts/$f" && ! "$f" =~ ^.*\.md$ ]]; then
+		continue
+	fi
+
 	if [ "$first" == "true" ]; then
 		first="false";
 	else
@@ -125,13 +136,24 @@ for f in $(ls -t "02_posts/"); do
 		postDir="$postFile/"
 		postFile="$(cd "02_posts/$postDir/"; ls *.md | head -n 1)"
 	fi
+	postFullPath="02_posts/$postDir$postFile"
 
-	title="$(cat "02_posts/$postDir$postFile" | grep -m 1 -e "^#" | sed 's/^# //' || true)"
+	title="$(cat "$postFullPath" | grep -m 1 -e "^#" | sed 's/^# //' || true)"
 	link="$settingsUrl/#/posts/$(rawurlencode "$postDir$postFile")"
 	file="$postDir$postFile"
-	description="$(cat "02_posts/$postDir$postFile" | grep -m 1 -e '^[^# ]\+' || true)..."
-	timestamp="$(stat -c "%Y" "02_posts/$postDir$postFile")"
-	date="$(date --utc +%FT%TZ -d @$timestamp)"
+	description="$(cat "$postFullPath" | grep -m 1 -e '^[^# ]\+' || true)..."
+
+	# generated meta data
+	metaFile="$postFullPath.meta"
+	if [ ! -f "$metaFile" ]; then
+		touch "$metaFile"
+	fi
+	date="$(getMeta "$metaFile" "date")"
+	if [ "$date" == "" ]; then
+		timestamp="$(stat -c "%Y" "$postFullPath")"
+		date="$(date --utc +%FT%TZ -d @$timestamp)"
+		echo "date: $date" >> "$metaFile"
+	fi
 
 	# index
 	echo -n '	{

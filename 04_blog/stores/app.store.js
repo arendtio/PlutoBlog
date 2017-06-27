@@ -17,6 +17,9 @@ function AppStore() {
 		debug.log("store", 1, "running app_init");
 
 		getJSON("posts.json", function(postIndex) {
+			postIndex.sort(function(a, b) {
+				return a.date < b.date // newest first
+			})
 			store.postIndex = postIndex;
 			store.Trigger("postindex_changed", postIndex);
 		});
