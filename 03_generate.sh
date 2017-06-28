@@ -148,7 +148,10 @@ for f in $(ls -t "02_posts/"); do
 	postFullPath="02_posts/$postDir$postFile"
 
 	title="$(cat "$postFullPath" | grep -m 1 -e "^#" | sed 's/^# //' || true)"
-	link="$settingsUrl/#/posts/$(rawurlencode "$postDir$postFile")"
+
+	# remove everything after the first / and the .md suffix
+	prettyId="$(echo "$postDir$postFile" | sed -e 's/\/.*$//g' -e 's/\.md$//g' -e 's/ /-/g')"
+	link="$settingsUrl/#/posts/$(rawurlencode "$prettyId")"
 	file="$postDir$postFile"
 	description="$(cat "$postFullPath" | grep -m 1 -e '^[^# ]\+' || true)..."
 
@@ -173,6 +176,7 @@ for f in $(ls -t "02_posts/"); do
 	echo -n '	{
 		"title":"'"$title"'",
 		"link":"'"$link"'",
+		"prettyId":"'"$prettyId"'",
 		"file":"'"$file"'",
 		"date":"'"$date"'",
 		"description":"'"$description"'"

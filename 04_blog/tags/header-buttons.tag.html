@@ -1,6 +1,6 @@
 <header-buttons>
 	<a href="#home">Home</a>
-	<a if="{ nextPostFile != undefined }"  href="#posts/{encodeURIComponent(nextPostFile)}">Next Post</a>
+	<a if="{ nextPostId != undefined }"  href="#posts/{encodeURIComponent(nextPostId)}">Next Post</a>
 
 	<script>
 	var tag = this;
@@ -12,8 +12,8 @@
 		debug.log("tag-updates", 1, "header-buttons-tag update");
 	});
 
-	RiotControl.on("next_post_changed", function(file) {
-		tag.nextPostFile = file;
+	RiotControl.on("next_post_changed", function(id) {
+		tag.nextPostId = id;
 		tag.update();
 	});
 	</script>

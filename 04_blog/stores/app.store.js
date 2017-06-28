@@ -37,13 +37,13 @@ function AppStore() {
 		// find current post and next Post
 		// posts.json is sorted by date
 		var postIndex = store.postIndex.findIndex(function(el) {
-			return el.file === store.selected.file
+			return el.prettyId === store.selected.prettyId
 		});
 
 		var nextPostIndex = undefined;
 		if(postIndex >= 1){
 			nextPostIndex = postIndex - 1
-			store.Trigger("next_post_changed", store.postIndex[nextPostIndex].file);
+			store.Trigger("next_post_changed", store.postIndex[nextPostIndex].prettyId);
 		} else {
 			store.Trigger("next_post_changed", undefined);
 		}
