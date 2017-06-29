@@ -41,17 +41,25 @@ cd "$SCRIPT_DIR"
 outputDir="./04_blog"
 indexFile="$outputDir/posts.json"
 rssFile="$outputDir/rss.xml"
+settingsFile="settings.txt"
+defaultSettingsFile="settings-default.txt"
+
+if [ ! -e "$settingsFile" ]; then
+	echo "$settingsFile does not exist. Please configure your PlutoBlog before using it."
+	exit
+fi
 
 function getSetting {
 	settingName="$1"
-	settingsFile="settings.txt"
-	if [ ! -e "$settingsFile" ]; then
-		settingsFile="settings-default.txt"
+	line="$(grep -i "$settingName" "$settingsFile")"
+	if [ "$line" == "" ]; then
+		# settings file does not contain the option, falling back to default settings file
+		line="$(grep -i "$settingName" "$defaultSettingsFile")"
 	fi
 
 	# gsub to trim whitespaces
 	#grep -i "$settingName" settings.txt | awk -F ':' '{gsub(/^[ \t]+/, "", $2); print $2}'
-	grep -i "$settingName" "$settingsFile" | cut -d: -f2- | sed 's/^[ \t]\+//'
+	echo "$line" | cut -d: -f2- | sed 's/^[ \t]\+//'
 }
 
 function getMeta {
@@ -86,18 +94,29 @@ function randomUUID {
 	fi
 }
 
+function replacePlaceholders {
+	targetFile="$1"
+	sed -e 's/\[RSS Feed Title\]/'"$(getSetting "Title")"'/' \
+		-e 's/\[Pluto Blog Title\]/'"$(getSetting "Title")"'/' \
+		-e 's/\[Author\]/'"$(getSetting "Author")"'/' \
+		-e 's/\[Description\]/'"$escapedDescription"'/' \
+		-e 's/\[Color1\]/'"$(getSetting "Color1")"'/' \
+		-e 's/\[Color2\]/'"$(getSetting "Color2")"'/' \
+		"$targetFile" > "$targetFile.bak" && mv "$targetFile.bak" "$targetFile"
+}
 settingsTitle="$(getSetting "Title")"
 settingsAuthor="$(getSetting "Author")"
 settingsDescription="$(getSetting "Description")"
 settingsUrl="$(getSetting "Url")"
+escapedDescription="$(getSetting "Description" | sed -e 's/\[/\\\[/g' -e 's/\]/\\\]/g' -e 's;/;\\\/;g' -e 's/\$/\\\$/g')"
 
 # update index.html
-escapedDescription="$(getSetting "Description" | sed -e 's/\[/\\\[/g' -e 's/\]/\\\]/g' -e 's;/;\\\/;g' -e 's/\$/\\\$/g')"
-cat material/index.html.template \
-	| sed -e 's/\[RSS Feed Title\]/'"$(getSetting "Title")"'/' \
-	| sed -e 's/\[Pluto Blog Title\]/'"$(getSetting "Title")"'/' \
-	| sed -e 's/\[Author\]/'"$(getSetting "Author")"'/' \
-	| sed -e 's/\[Description\]/'"$escapedDescription"'/' > 04_blog/index.html
+cp material/index.html.template 04_blog/index.html
+replacePlaceholders "04_blog/index.html"
+
+cp material/css/app.css.template 04_blog/css/app.css
+replacePlaceholders "04_blog/css/app.css"
+
 
 # update logo.svg
 if [ -e "logo.svg" ]; then

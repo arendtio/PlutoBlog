@@ -8,6 +8,7 @@ settings.txt
 04_blog/posts/*
 !04_blog/posts/.keepme
 04_blog/img/logo.svg
+04_blog/css/app.css
 04_blog/index.html
 04_blog/posts.json
 04_blog/rss.xml

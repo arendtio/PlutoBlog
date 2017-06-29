@@ -15,9 +15,9 @@
 	-->
 	<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:; connect-src *;script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.polyfill.io/v2/polyfill.min.js;">-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
-	<meta name="theme-color" content="#1284a1"><!-- Chrome, Firefox OS and Opera -->
-	<meta name="msapplication-navbutton-color" content="#1284a1"><!-- Windows Phone -->
-	<meta name="apple-mobile-web-app-status-bar-style" content="#1284a1"><!-- iOS Safari -->
+	<meta name="theme-color" content="[Color1]"><!-- Chrome, Firefox OS and Opera -->
+	<meta name="msapplication-navbutton-color" content="[Color1]"><!-- Windows Phone -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="[Color1]"><!-- iOS Safari -->
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 	<!--<link href="https://fonts.googleapis.com/css?family=Amiri:400,400i,700,700i|Lato:400,700,700i" rel="stylesheet">-->
 	<link rel="alternate" type="application/rss+xml" href="rss.xml" title="[RSS Feed Title]">

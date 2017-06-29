@@ -179,15 +179,15 @@ header a:first-child {
 }
 
 a {
-	color: hsla(192, 80%, 35%, 1);
+	color: [Color1];
 	text-decoration: none;
 }
 aside {
 	position: static;
 	text-align: center;
 	color: #fff;
-	background: hsla(188, 80%, 35%, 1);
-	background: linear-gradient(150deg, hsla(192, 80%, 35%, 1), hsla(188, 80%, 35%, 1));
+	background: [Color1];
+	background: linear-gradient(150deg, [Color1], [Color2]);
 }
 aside a {
 	color: #fff;
