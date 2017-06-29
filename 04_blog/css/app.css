@@ -127,6 +127,7 @@ header a:first-child {
 
 .sd-content p code {
 	padding: 2px 4px;
+	font-size: 0.83em;
 	border-radius: 5px;
 	background: #eaeaea;
 }

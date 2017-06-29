@@ -1,5 +1,5 @@
 // Init debug
-var debug = new Debug({"all": 0});
+var debug = new Debug({"all": 0, "highlighting": 0, "init": 0, "route": 0, "store": 0, "tag-updates": 0, "trigger": 0});
 
 var appStore = new AppStore();
 RiotControl.addStore(appStore);
