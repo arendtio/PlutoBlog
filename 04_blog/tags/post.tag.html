@@ -1,7 +1,7 @@
 <post>
 	<div class="sd-content">
 
-		<raw if="{fetched}" html="{md2html(md, file)}"/>
+		<raw if="{fetched}" html="{md2html(md, file)}" onchange="{initHighlight}"/>
 		<div if="{ ! fetched}" class="spinner"></div>
 	</div>
 
@@ -43,13 +43,11 @@
 			request.send();
 		}
 	});
-	tag.on("updated", function() {
-		debug.log("tag-updates", 1, "post-tag updateD");
-		tag.initHighlight();
-	});
-	tag.initHighlight = function() {
+	tag.initHighlight = function(evt) {
+		evt.preventUpdate = true;
 		// start highlightjs again
-		els = tag.root.querySelectorAll("pre");
+		debug.log("highlighting", 1, "starting highlightjs", arguments);
+		els = tag.root.querySelectorAll("pre code");
 		for(var i=0; i<els.length; i++) {
 			hljs.highlightBlock(els[i]);
 		}

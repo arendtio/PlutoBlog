@@ -6,6 +6,7 @@
 
   	tag.set = function() {
 		tag.root.childNodes[0].innerHTML = opts.html
+		triggerEvent.call(tag.root, "change");
 	}
 	tag.on("mount", function() {
 		debug.log("tag-updates", 1, "raw-tag mount");
@@ -15,7 +16,6 @@
 		debug.log("tag-updates", 1, "raw-tag update");
 		tag.set();
 	});
-
 	</script>
 
 	<style>
