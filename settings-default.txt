@@ -4,3 +4,4 @@ Description: Almost a Blog
 Url: http://blog.example.com
 Color1: #1284a1
 Color2: #128ea1
+GitHubPages-Extension: false

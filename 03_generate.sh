@@ -110,6 +110,22 @@ settingsDescription="$(getSetting "Description")"
 settingsUrl="$(getSetting "Url")"
 escapedDescription="$(getSetting "Description" | sed -e 's/\[/\\\[/g' -e 's/\]/\\\]/g' -e 's;/;\\\/;g' -e 's/\$/\\\$/g')"
 
+pagesExtension="$(getSetting "GitHubPages-Extension")"
+
+# starting GitHub Extension before modifying "04_blog/"
+if [ "$pagesExtension" == "true" ]; then
+	echo "Using GitHub Pages Extension..."
+	if [ ! -d "04_blog/.git" ]; then
+		echo "04_blog/.git does not exist. Your PlutoBlog does not seem to be configured correctly for the GitHub Pages Extension, exiting."
+		exit
+	fi
+
+	cd 04_blog
+	echo "Pulling latest changes from GitHub Pages repo"
+	git pull
+	cd -
+fi
+
 # update index.html
 cp material/index.html.template 04_blog/index.html
 replacePlaceholders "04_blog/index.html"
@@ -220,3 +236,14 @@ echo -n '
 </channel>
 </rss>
 ' >> $rssFile
+
+if [ "$pagesExtension" == "true" ]; then
+	echo "Publishing with GitHub Pages Extension..."
+	cd "04_blog"
+	git add .
+	git status
+	git commit -am "Update by GitHub Pages Extension"
+	git push
+	cd -
+	echo "Done"
+fi
