@@ -44,8 +44,9 @@ function RouterStore() {
 				route(store.defaultRoute);
 				return
 			}
-			store.handleRoute(location.hash.slice(1), store.options);
+			store.handleRoute(location.hash.replace(/^#\!?/, ''), store.options); // regex works for #! and #
 		});
+		route.base('#!'); // disqus requires #!
 		route.start(true)
 	});
 

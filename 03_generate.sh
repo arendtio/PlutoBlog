@@ -190,7 +190,7 @@ for f in $(ls -t "02_posts/"); do
 
 	# remove everything after the first / and the .md suffix
 	prettyId="$(echo "$postDir$postFile" | sed -e 's/\/.*$//g' -e 's/\.md$//g' -e 's/ /-/g')"
-	link="$settingsUrl/#posts/$(rawurlencode "$prettyId")"
+	link="$settingsUrl/#!posts/$(rawurlencode "$prettyId")"
 	file="$postDir$postFile"
 	description="$(cat "$postFullPath" | grep -m 1 -e '^[^# ]\+' || true)..."
 
