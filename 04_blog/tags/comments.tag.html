@@ -1,0 +1,43 @@
+<comments>
+	<div if="{display}" id="disqus_thread" class="comments"></div>
+
+	<script>
+	var tag = this;
+	tag.url = opts.url;
+	tag.guid = opts.guid;
+	tag.link = opts.link;
+	tag.title = opts.title;
+	tag.display=false;
+
+	tag.on("mount", function() {
+		debug.log("tag-updates", 1, "comments-tag mount");
+	});
+	tag.on("update", function() {
+		debug.log("tag-updates", 1, "comments-tag update");
+	});
+
+	RiotControl.on("remove_all_comments", function() {
+		debug.log("comments", 2, "removing all comments")
+		tag.display=false;
+		tag.update();
+	});
+
+	RiotControl.on("add_comments_for", function(url) {
+		if(url == tag.url){
+			debug.log("comments", 2, "url matches for comments", url, tag.url);
+			tag.display=true;
+			tag.update();
+			RiotControl.trigger("added_comments", tag.guid, tag.link, tag.title);
+		} else {
+			debug.log("comments", 2, "url does not match for comments", url, tag.url);
+		}
+	});
+	</script>
+
+	<style>
+		.comments {
+			margin-top: 2.4em;
+		}
+	</style>
+</comments>
+

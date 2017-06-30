@@ -102,6 +102,7 @@ function replacePlaceholders {
 		-e 's/\[Description\]/'"$escapedDescription"'/' \
 		-e 's/\[Color1\]/'"$(getSetting "Color1")"'/' \
 		-e 's/\[Color2\]/'"$(getSetting "Color2")"'/' \
+		-e 's/\[Disqus-Site\]/'"$(getSetting "Disqus-Site")"'/' \
 		"$targetFile" > "$targetFile.bak" && mv "$targetFile.bak" "$targetFile"
 }
 settingsTitle="$(getSetting "Title")"
@@ -132,6 +133,9 @@ replacePlaceholders "04_blog/index.html"
 
 cp material/css/app.css.template 04_blog/css/app.css
 replacePlaceholders "04_blog/css/app.css"
+
+cp material/stores/disqus.store.js.template 04_blog/stores/disqus.store.js
+replacePlaceholders "04_blog/stores/disqus.store.js"
 
 
 # update logo.svg
@@ -211,6 +215,7 @@ for f in $(ls -t "02_posts/"); do
 	echo -n '	{
 		"title":"'"$title"'",
 		"link":"'"$link"'",
+		"guid":"'"$uuid"'",
 		"prettyId":"'"$prettyId"'",
 		"file":"'"$file"'",
 		"date":"'"$date"'",

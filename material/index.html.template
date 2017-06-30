@@ -47,10 +47,12 @@
 	<script src="tags/pages.tag.html" type="riot/tag"></script>
 	<script src="tags/page.tag.html" type="riot/tag"></script>
 	<script src="tags/post.tag.html" type="riot/tag"></script>
+	<script src="tags/comments.tag.html" type="riot/tag"></script>
 	<script src="tags/raw.tag.html" type="riot/tag"></script>
 
 	<script src="stores/app.store.js"></script>
 	<script src="stores/router.store.js"></script>
+	<script src="stores/disqus.store.js"></script>
 	<script src="js/init-app.js"></script>
   </body>
 </html>

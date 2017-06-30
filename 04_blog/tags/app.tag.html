@@ -16,7 +16,8 @@
 			</div>
 		</page>
 		<page each="{post in parent.index}" pattern="posts/[prettyId]" url="posts/{encodeURIComponent(post.prettyId)}">
-			<post file="{post.file}">
+			<post file="{post.file}"/>
+			<comments url="posts/{encodeURIComponent(post.prettyId)}" guid="{post.guid}" link="{post.link}" title="{post.title}"/>
 		</page>
 	</pages>
 	<aside>

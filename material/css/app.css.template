@@ -154,7 +154,7 @@ header a:first-child {
 .entry .divider {
 	margin: 0 auto;
 	width: 60%;
-	height: 0.6em;
+	height: 0.55em;
 	text-align: center;
 	border-bottom: 1px solid #ddd;
 	overflow: visible;
