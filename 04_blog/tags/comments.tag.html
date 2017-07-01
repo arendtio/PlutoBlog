@@ -8,12 +8,20 @@
 	tag.link = opts.link;
 	tag.title = opts.title;
 	tag.display=false;
+	tag.waitingForUpdateCompletion=false;
 
 	tag.on("mount", function() {
 		debug.log("tag-updates", 1, "comments-tag mount");
 	});
 	tag.on("update", function() {
 		debug.log("tag-updates", 1, "comments-tag update");
+	});
+	tag.on("updated", function() {
+		debug.log("tag-updates", 1, "comments-tag updateD");
+		if(tag.waitingForUpdateCompletion){
+			tag.waitingForUpdateCompletion=false;
+			RiotControl.trigger("added_comments", tag.guid, tag.link, tag.title);
+		}
 	});
 
 	RiotControl.on("remove_all_comments", function() {
@@ -26,8 +34,8 @@
 		if(url == tag.url){
 			debug.log("comments", 2, "url matches for comments", url, tag.url);
 			tag.display=true;
+			tag.waitingForUpdateCompletion=true;
 			tag.update();
-			RiotControl.trigger("added_comments", tag.guid, tag.link, tag.title);
 		} else {
 			debug.log("comments", 2, "url does not match for comments", url, tag.url);
 		}
