@@ -13,7 +13,7 @@ var md2html = function(){
 				var basepath = filepath.replace(/[^\/]*$/, "")
 				if(basepath !== ""){
 					html = html.replace(/(<img src=")(?!http)([^"]*"[^>]*>)/ig, "$1posts/"+basepath+"$2");
-					html = html.replace(/(<a href=")(?!http)([^"]*"[^>]*>)/ig, "$1posts/"+basepath+"$2");
+					html = html.replace(/(<a href=")(?![#\/])(?!http)([^"]*"[^>]*>)/ig, "$1posts/"+basepath+"$2");
 				}
 			}
 		}
