@@ -37,7 +37,7 @@ function DisqusStore() {
 				})();
 				store.first = false;
 			} else {
-				if(DISQUS !== undefined){ // ad-blockers, etc.
+				if(typeof DISQUS !== 'undefined'){ // ad-blockers, etc.
 					DISQUS.reset({
 						reload: true,
 						config: disqus_config
