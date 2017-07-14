@@ -37,10 +37,12 @@ function DisqusStore() {
 				})();
 				store.first = false;
 			} else {
-				DISQUS.reset({
-					reload: true,
-					config: disqus_config
-				});
+				if(DISQUS !== undefined){ // ad-blockers, etc.
+					DISQUS.reset({
+						reload: true,
+						config: disqus_config
+					});
+				}
 			}
 		});
 	}
