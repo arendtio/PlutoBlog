@@ -1,4 +1,8 @@
-function RouterStore() {
+import riot from "riot"
+import route from "riot-route"
+import debug from "../js/debug.js"
+
+export default function() {
 	riot.observable(this);
 
 	var store = this;

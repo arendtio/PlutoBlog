@@ -1,4 +1,8 @@
-function AppStore() {
+import getJSON from "../js/getjson.js"
+import debug from "../js/debug.js"
+import riot from "riot"
+
+export default function() {
 	riot.observable(this);
 
 	var store = this;

@@ -1,5 +1,5 @@
 //getJSON from http://youmightnotneedjquery.com/
-function getJSON(url, successCallback) {
+export default function(url, successCallback) {
 	var request = new XMLHttpRequest();
 	request.open("GET", url, true);
 

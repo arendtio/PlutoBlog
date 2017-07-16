@@ -1,5 +1,10 @@
-// usage: var html = md2html('# This is Markdown')
-var md2html = function(){
+import showdown from "showdown"
+
+// Usage:
+// import md from "./showdown-wrapper.js"
+// var md2html = md(); // factory
+// var html = md2html('# This is Markdown')
+export default function(){
 	var sd = new showdown.Converter();
 	return function(md, filepath) {
 		var html = sd.makeHtml(md);
@@ -20,4 +25,4 @@ var md2html = function(){
 
 		return html;
 	}
-}();
+};

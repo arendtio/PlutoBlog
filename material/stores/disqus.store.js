@@ -1,8 +1,11 @@
-function DisqusStore() {
+import riot from "riot"
+import debug from "../js/debug.js"
+
+export default function() {
 	riot.observable(this);
 
 	var store = this;
-	store.active = ("[Disqus-Site]" != "")
+	store.active = (DISQUS_SITE != "")
 	store.first = true;
 	store.targetPage = undefined;
 
@@ -31,7 +34,7 @@ function DisqusStore() {
 			if(store.first){
 				(function() { // DON'T EDIT BELOW THIS LINE
 				var d = document, s = d.createElement('script');
-				s.src = 'https://[Disqus-Site].disqus.com/embed.js';
+				s.src = 'https://.disqus.com/embed.js';
 				s.setAttribute('data-timestamp', +new Date());
 				(d.head || d.body).appendChild(s);
 				})();

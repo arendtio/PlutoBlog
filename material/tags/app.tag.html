@@ -1,0 +1,131 @@
+<app class="m-app">
+	<header>
+		<header-buttons/>
+	</header>
+	<pages>
+		<page pattern="home">
+			<div class="home entry" each="{i in parent.parent.index}">
+				<h1>{i.title}</h1>
+				<!--<span>{(new Date(i.date)).toDateString()}</span>-->
+				<div class="sd-content">
+					<raw html="{ parent.parent.parent.md2html(i.description, i.file) }"/>
+				</div>
+				<div class="divider">
+					<a href="#!posts/{encodeURIComponent(i.prettyId)}">More</a>
+				</div>
+			</div>
+		</page>
+		<page each="{post in parent.index}" pattern="posts/[prettyId]" url="posts/{encodeURIComponent(post.prettyId)}">
+			<post file="{post.file}"/>
+			<comments url="posts/{encodeURIComponent(post.prettyId)}" guid="{post.guid}" link="{post.link}" title="{post.title}"/>
+		</page>
+	</pages>
+	<aside>
+		<br/>
+		<br/>
+		<img src="img/logo.svg"/>
+		<br/>
+		<br/>
+		{ author }<br/>
+		<br/>
+		<raw html="{ md2html(description) }"/>
+		<br/>
+		<br/>
+		<br/>
+		<div class="footer">
+			<a href="rss.xml"><img src="img/rss.svg"/> RSS Feed</a>
+			<br/>
+			<br/>
+			<br/>
+			<sub><a href="https://github.com/arendtio/PlutoBlog">Made with ♥ and ♇</a></sub><br/>
+			<br/>
+		</div>
+	</aside>
+	<div class="preload">
+		<div class="spinner"></div>
+	</div>
+
+
+	<script>
+	import RiotControl from "../js/riotcontrol.js" // patched
+	import debug from "../js/debug.js"
+	import animationController from "../js/animationController.js"
+	import md from "../js/showdown-wrapper.js"
+
+	var tag = this
+	tag.index = undefined;
+	tag.selected = {};
+	tag.author = "";
+	tag.description = "";
+	tag.routerStarted = false;
+	tag.mountComplete = false;
+
+	tag.animationController = new animationController();
+
+	tag.on("mount", function() {
+		debug.log("tag-updates", 1, "app-tag mount");
+		tag.author = document.head.querySelector("[name=author]").content;
+		tag.description = document.head.querySelector("[name=description]").content;
+		RiotControl.trigger("app_init");
+	});
+
+	tag.on("update", function() {
+		debug.log("tag-updates", 1, "APP-TAG UPDATE");
+	});
+
+	tag.on("updated", function() {
+		tag.routerStarter();
+	});
+
+	RiotControl.on("postindex_changed", function(index) {
+		tag.index = index;
+		tag.update();
+	});
+
+	RiotControl.on("init_mount_complete", function() {
+		tag.mountComplete = true;
+		tag.routerStarter();
+	});
+
+	RiotControl.on("prepare_page_change", function(currentUrl, targetUrl) {
+		RiotControl.trigger("url_change", currentUrl, targetUrl);
+	});
+
+	tag.routerStarter = function() {
+		if( tag.mountComplete && tag.index !== undefined){
+			if( ! tag.routerStarted){
+				tag.routerStarted = true;
+
+				// start router
+				RiotControl.trigger("register_animation_controller", tag.animationController);
+				RiotControl.trigger("start_router", "home");
+			}
+		}
+	}
+
+	// create showdown instance
+	tag.md2html = md();
+
+	</script>
+
+	<style>
+		.page.animating {
+			position: absolute;
+			display: block;
+		}
+		.page {
+			/*to have the same page size for display static as for absolute*/
+			padding-top: 1px;
+			padding-bottom: 1px;
+		}
+		.preload {
+			position:absolute;
+			z-index: -1;
+			top: 0;
+			left: 0;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+		}
+	</style>
+</app>

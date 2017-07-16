@@ -1,11 +1,15 @@
 <post>
 	<div class="sd-content">
-
 		<raw if="{fetched}" html="{md2html(md, file)}" onchange="{initHighlight}"/>
 		<div if="{ ! fetched}" class="spinner"></div>
 	</div>
 
 	<script>
+	import RiotControl from "../js/riotcontrol.js" // patched
+	import debug from "../js/debug.js"
+	import md from "../js/showdown-wrapper.js"
+	import hljs from "../js/highlight.pack.js"
+
 	var tag = this;
 	tag.file = undefined;
 	tag.md="";
@@ -43,11 +47,15 @@
 			request.send();
 		}
 	});
+
+	// create showdown instance
+	tag.md2html = md();
+
 	tag.initHighlight = function(evt) {
 		evt.preventUpdate = true;
 		// start highlightjs again
 		debug.log("highlighting", 1, "starting highlightjs", arguments);
-		els = tag.root.querySelectorAll("pre code");
+		var els = tag.root.querySelectorAll("pre code");
 		for(var i=0; i<els.length; i++) {
 			hljs.highlightBlock(els[i]);
 		}

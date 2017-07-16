@@ -3,6 +3,9 @@
 	<a if="{ nextPostId != undefined }"  href="#!posts/{encodeURIComponent(nextPostId)}">Next Post</a>
 
 	<script>
+	import RiotControl from "../js/riotcontrol.js" // patched
+	import debug from "../js/debug.js"
+
 	var tag = this;
 
 	tag.on("mount", function() {

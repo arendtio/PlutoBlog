@@ -1,3 +1,6 @@
+//import debug from './debug.js'
+var debug = require('./debug.js')
+
 var RiotControl = {
   _stores: [],
   addStore: function(store) {

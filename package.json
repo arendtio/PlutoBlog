@@ -1,0 +1,27 @@
+{
+  "name": "plutoblog",
+  "version": "0.0.0",
+  "description": "Almost a Blog",
+  "repository": "git@github.com:arendtio/PlutoBlog.git",
+  "author": "Finn Arendt",
+  "license": "MIT",
+  "dependencies": {
+    "highlight.js": "^9.12.0",
+    "riot": "^3.6.1",
+    "riot-route": "^3.1.2",
+    "showdown": "^1.7.1",
+    "simple-intl": "^0.9.0",
+    "velocity-animate": "^1.5.0"
+  },
+  "devDependencies": {
+    "rollup": "^0.45.2",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-glob-import": "^0.0.3",
+    "rollup-plugin-legacy": "^1.0.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-riot": "^1.1.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "rollup-plugin-visualizer": "^0.3.1",
+    "rollup-watch": "^4.3.1"
+  }
+}

@@ -2,6 +2,9 @@
 	<div if="{display}" id="disqus_thread" class="comments"></div>
 
 	<script>
+	import RiotControl from "../js/riotcontrol.js" // patched
+	import debug from "../js/debug.js"
+
 	var tag = this;
 	tag.url = opts.url;
 	tag.guid = opts.guid;

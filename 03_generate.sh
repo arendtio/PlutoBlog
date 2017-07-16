@@ -134,8 +134,8 @@ replacePlaceholders "04_blog/index.html"
 cp material/css/app.css.template 04_blog/css/app.css
 replacePlaceholders "04_blog/css/app.css"
 
-cp material/stores/disqus.store.js.template 04_blog/stores/disqus.store.js
-replacePlaceholders "04_blog/stores/disqus.store.js"
+cp material/js/config.js.template 04_blog/js/config.js
+replacePlaceholders "04_blog/js/config.js"
 
 
 # update logo.svg
