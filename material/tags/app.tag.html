@@ -4,14 +4,16 @@
 	</header>
 	<pages>
 		<page pattern="home">
-			<div class="home entry" each="{i in parent.parent.index}">
-				<h1>{i.title}</h1>
-				<!--<span>{(new Date(i.date)).toDateString()}</span>-->
-				<div class="sd-content">
-					<raw html="{ parent.parent.parent.md2html(i.description, i.file) }"/>
-				</div>
-				<div class="divider">
-					<a href="#!posts/{encodeURIComponent(i.prettyId)}">{ i18n('G_MORE_BUTTON') }</a>
+			<div class="home">
+				<div class="entry" each="{i in parent.parent.index}" onclick="{ parent.parent.parent.link('posts/'+encodeURIComponent(i.prettyId)) }">
+					<h1>{i.title}</h1>
+					<!--<span>{(new Date(i.date)).toDateString()}</span>-->
+					<div class="sd-content">
+						<raw html="{ parent.parent.parent.md2html(i.description, i.file) }"/>
+					</div>
+					<div class="divider">
+						<a href="#!posts/{encodeURIComponent(i.prettyId)}">{ i18n('G_MORE_BUTTON') }</a>
+					</div>
 				</div>
 			</div>
 		</page>
@@ -90,6 +92,12 @@
 	RiotControl.on("prepare_page_change", function(currentUrl, targetUrl) {
 		RiotControl.trigger("url_change", currentUrl, targetUrl);
 	});
+
+	tag.link = function(route) {
+		return function() {
+			RiotControl.trigger("request_route", route);
+		}
+	}
 
 	tag.routerStarter = function() {
 		if( tag.mountComplete && tag.index !== undefined){
