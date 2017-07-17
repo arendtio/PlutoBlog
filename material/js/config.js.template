@@ -1,4 +1,4 @@
-// debug settings
+// debug settings:
 var process = process || {}
 process.env = process.env || {}
 process.env.DEBUG_SETTINGS = {
@@ -11,4 +11,6 @@ process.env.DEBUG_SETTINGS = {
 	"tag-updates": 0,
 	"trigger": 0
 }
+
+// Disqus settings:
 DISQUS_SITE = "[Disqus-Site]"

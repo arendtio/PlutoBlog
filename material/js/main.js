@@ -2,6 +2,7 @@
 import debug from "./debug.js"
 import riot from "riot"
 import RiotControl from "./riotcontrol.js" // patched
+import simpleintl from "simple-intl"
 
 //stores
 import AppStore from "../stores/app.store.js"
@@ -20,7 +21,11 @@ RiotControl.addStore(routerStore);
 var disqusStore = new DisqusStore();
 RiotControl.addStore(disqusStore);
 
-var tags = riot.mount("*")
-debug.log("init", 1, "all tags mounted", tags);
+// simple-intl i18n as global variable:
+var availableLanguages = ["en", "de"];
+window.i18n = simpleintl(availableLanguages, function() {
+	var tags = riot.mount("*")
+	debug.log("init", 1, "all tags mounted", tags);
 
-RiotControl.trigger("all_tags_mounted");
+	RiotControl.trigger("all_tags_mounted");
+});
