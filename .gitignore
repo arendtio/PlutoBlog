@@ -12,6 +12,7 @@ stats.html
 !04_blog/posts/.keepme
 04_blog/img/logo.svg
 04_blog/css/app.css
+04_blog/indices/*
 04_blog/js/config.js
 04_blog/stores/disqus.store.js
 04_blog/index.html
