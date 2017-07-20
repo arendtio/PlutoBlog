@@ -132,11 +132,6 @@ header a:first-child {
 	background: #eaeaea;
 }
 
-.sd-content > raw > div > div,
-.sd-content > raw > div > p > div {
-	margin: 1em -8.5% 1.6em -8.5%;
-	max-width: 117%;
-}
 .sd-content img {
 	display: block;
 	margin: 0 auto;
@@ -202,7 +197,7 @@ aside img {
 	width: 1em;
 	margin-bottom: -2px;
 }
-@media (max-width: 1219px) {
+@media (max-width: 1269px) {
 	header {
 		position: fixed;
 		z-index: 100;
@@ -216,7 +211,7 @@ aside img {
 	.page-content {
 		margin: 2.8em auto 0em auto;
 		padding: 1em 1em;
-		max-width: 500px;
+		max-width: 600px;
 		background: #fff;
 		border-bottom: 1px solid #ddd;
 	}
@@ -228,7 +223,7 @@ aside img {
 		width: 160px;
 	}
 }
-@media (min-width: 1220px) {
+@media (min-width: 1270px) {
 	/* theme? */
 	header {
 		position: fixed;
@@ -242,8 +237,8 @@ aside img {
 	}
 	.page-content {
 		margin: 5em auto 20px auto;
-		padding: 3.2em 100px;
-		max-width: 500px;
+		padding: 3.2em 80px;
+		max-width: 600px;
 		background: #fff;
 		border: 1px solid #ddd;
 		border-radius: 2px;
@@ -264,6 +259,11 @@ aside img {
 		position: absolute;
 		width: 100%;
 		bottom: 4em;
+	}
+	.sd-content > raw > div > div,
+	.sd-content > raw > div > p > div {
+		margin: 1em -6% 1.6em -6%;
+		max-width: 117%;
 	}
 }
 
