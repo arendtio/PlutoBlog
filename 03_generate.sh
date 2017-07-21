@@ -178,7 +178,7 @@ function getIndexEntry {
 	local title="$(cat "$postFullPath" | grep -m 1 -e "^#" | sed 's/^# //' || true)"
 
 	# remove everything after the first / and the .md suffix
-	local prettyId="$(echo "$postDir$primaryPostFile" | sed -e 's/\/.*$//g' -e 's/\.md$//g' -e 's/ /-/g')"
+	local prettyId="$(getPrettyId "$postDir" "$postFile")"
 	local link="$settingsUrl/#!posts/$(rawurlencode "$prettyId")"
 	local file="$postDir$postFile"
 	local description="$(cat "$postFullPath" | grep -m 1 -e '^[^# ]\+' || true)..."
@@ -207,15 +207,19 @@ function getOrphanIndexEntry {
 	local primaryPostFullPath="02_posts/$postDir$primaryPostFile"
 
 	local metaFile="$primaryPostFullPath.meta"
+	local firstTranslation="$(getFirstTranslationFromMeta "$metaFile" "$postFullPath")"
 	local date="$(getDateFromMeta "$metaFile" "$postFullPath")"
 	local uuid="$(getUUIDFromMeta "$metaFile")"
+	local prettyId="$(getPrettyId "$postDir" "$postFile")"
 
 	# languages
 	local languages="$(getLanguageArray "$postFullPath")"
 
 	echo -n '		{
 			"guid":"'"$uuid"'",
+			"prettyId":"'"$prettyId"'",
 			"date":"'"$date"'",
+			"firstTranslation":"'"$firstTranslation"'",
 			"languages":'"$languages"'
 		}'
 }

@@ -17,37 +17,12 @@ export default function() {
 	}
 
 	store.postList = [];
-	store.optimalLanguage = undefined;
 	store.primaryResponse = undefined;
-	store.secondaryResponse = undefined;
+	store.secondaryResponses = undefined;
 
 	store.on("app_init", function() {
 		debug.log("store", 1, "running app_init");
-
-		debug.log("store", 2, "loading primary index");
-		getJSON("posts.json", function(primaryResponse) {
-			// sort and save primaryIndex
-			primaryResponse.posts.sort(store.sortFunc)
-			store.primaryResponse = primaryResponse;
-
-			// detect optimal language for secondaryIndex
-			var allLangs = [primaryResponse.primaryLanguage].concat(primaryResponse.secondaryIndices);
-			debug.log("store", 3, "allLangs", allLangs);
-			store.optimalLanguage = simpleintl.detectLanguage(allLangs, primaryResponse.primaryLanguage);
-			debug.log("store", 2, "detected optimalLanguage", store.optimalLanguage);
-			if(store.optimalLanguage !== primaryResponse.primaryLanguage) {
-				debug.log("store", 2, "loading secondary index");
-				getJSON("indices/posts."+store.optimalLanguage+".json", function(secondaryResponse) {
-					secondaryResponse.posts.sort(store.sortFunc);
-					store.secondaryResponse = secondaryResponse;
-					debug.log("store", 2, "saved secondary index", store.secondaryResponse);
-					store.generatePostList();
-				});
-			} else {
-				debug.log("store", 2, "skipping secondary index");
-				store.generatePostList();
-			}
-		});
+		store.loadIndices();
 	});
 
 	store.on("all_tags_mounted", function() {
@@ -75,6 +50,94 @@ export default function() {
 		}
 	});
 
+	store.loadIndices = function() {
+		debug.log("store", 2, "loading primary index");
+		getJSON("posts.json", function(primaryResponse) {
+			// sort and save primaryIndex
+			primaryResponse.posts.sort(store.sortFunc)
+			store.primaryResponse = primaryResponse;
+
+			var idToLang = store.getRequiredSecondaryIndices();
+			var langMap = {}
+			for(var id in idToLang) {
+				if (idToLang.hasOwnProperty(id)) {
+					var lang = idToLang[id];
+					langMap[lang]=true;
+				}
+			}
+			var langs = [];
+			for (var oneLang in langMap) {
+				if (langMap.hasOwnProperty(oneLang)) {
+					langs.push(oneLang);
+				}
+			}
+			debug.log("store", 3, "langs", langs);
+			store.loadSecondaryIndices(langs, function() {
+				debug.log("store", 2, "all secondary indices have been fetched");
+				store.generatePostList(idToLang);
+			})
+		});
+	}
+
+	store.getRequiredSecondaryIndices = function() {
+		var browserLangs = simpleintl.browserLanguages();
+		var idToLang = {}
+		for(var i=0; i<store.primaryResponse.posts.length; i++) {
+			var p = store.primaryResponse.posts[i]
+			var fallback = store.primaryResponse.primaryLanguage;
+			if(p.firstTranslation !== undefined) {
+				fallback = p.firstTranslation
+			}
+			var langMatch = store.findLangMatch(browserLangs, p.languages, fallback)
+
+			if(langMatch !== store.primaryResponse.primaryLanguage) {
+				idToLang[p.guid]=langMatch;
+			}
+		}
+		return idToLang
+	}
+
+	store.findLangMatch = function(browserLangs, postLangs, fallback) {
+		// Loop all entries and find the best matching language for every entry
+		var match = fallback;
+		for(var i=0; i<browserLangs.length; i++) {
+			var index = postLangs.findIndex(function(e) {
+				return e === browserLangs[i]
+			})
+			if(index >= 0) {
+				match=browserLangs[i];
+				break;
+			}
+		}
+		return match;
+	}
+
+	store.loadSecondaryIndices = function(list, callback) {
+		var target = list.length;
+		var responder = function() {
+			target--;
+			if(target <= 0) {
+				callback();
+			}
+		}
+
+		var handlerFactory = function(langKey) {
+			return function(data) {
+				data.posts.sort(store.sortFunc);
+				store.secondaryResponses[langKey] = data;
+				debug.log("store", 2, "saved secondary index", store.secondaryResponses[langKey]);
+				responder();
+			}
+		}
+
+		store.secondaryResponses = {};
+		for(var i=0; i<list.length; i++) {
+			debug.log("store", 2, "loading secondary index");
+			var lang = list[i]
+			getJSON("indices/posts."+lang+".json", handlerFactory(lang));
+		}
+	}
+
 	store.sortFunc = function(a, b) {
 		return a.date < b.date // newest first
 	}
@@ -82,30 +145,22 @@ export default function() {
 	store.deepCopy = function(a) {
 		return JSON.parse(JSON.stringify(a))
 	}
-	store.generatePostList = function() {
+	store.generatePostList = function(idToLang) {
 		debug.log("store", 2, "generating postList");
 
 		store.postList = store.deepCopy(store.primaryResponse.posts)
 
-		// Merge secondary index if available
-		if(store.secondaryResponse !== undefined && store.optimalLanguage !== undefined) {
-			debug.log("store", 2, "secondary index exists", store.secondaryResponse);
-			for(var i=0; i<store.postList.length; i++) {
-				var p = store.postList[i];
-				var posOfOptimalLanguage = p.languages.findIndex(function(e) {
-					return e === store.optimalLanguage
+		// Merge secondary indices
+		for(var i=0; i<store.postList.length; i++) {
+			var p = store.postList[i];
+			var lang = idToLang[p.guid]
+
+			if(lang !== undefined && lang !== store.primaryResponse.primaryLanguage) {
+				debug.log("store", 3, "replacing post", p.guid, "with the secondary index equivalent");
+				var p2 = store.secondaryResponses[lang].posts.find(function(e) {
+					return e.guid === p.guid
 				});
-				if(posOfOptimalLanguage >= 0) {
-					// so a secondary index exists and the post we are testing
-					// lists the language of the secondary index as supported
-					// now we replace the post entry in the primary index with
-					// the one from the secondary index
-					var p2 = store.secondaryResponse.posts.find(function(e) {
-						return e.guid === p.guid
-					});
-					debug.log("store", 3, "replacing post", p.guid, "with the secondary index equivalent");
-					store.postList[i] = p2;
-				}
+				store.postList[i] = p2;
 			}
 		}
 

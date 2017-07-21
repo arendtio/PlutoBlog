@@ -56,6 +56,34 @@ function getUUIDFromMeta {
 	echo "$uuid"
 }
 
+function getFirstTranslationFromMeta {
+	local metaFile="$1"
+	local postFullPath="$2"
+	local primaryPostFullPath="$(toPrimaryPost "$postFullPath")"
+	local basePath="$(echo "$primaryPostFullPath" | sed 's/\.md$//')"
+
+	# check primary file existence
+	if [ -e "$primaryPostFullPath" ]; then
+		return "$settingsPrimaryLanguage"
+	fi
+
+	# look in meta file
+	local firstTranslation="$(getMeta "$metaFile" "First-Translation")"
+	if [ "$firstTranslation" == "" ]; then
+		# get oldest translation file
+		local oldestTranslationFile="$(ls -t "$basePath".[a-z][a-z]*.md | tail -n1)"
+		local firstTranslation="$(langFromFilename "$oldestTranslationFile")"
+	fi
+	echo "$firstTranslation"
+}
+
+function getPrettyId {
+	local postDir="$1"
+	local postFile="$2"
+	local primaryPostFile="$(toPrimaryPost "$postFile")"
+	echo "$postDir$primaryPostFile" | sed -e 's/\/.*$//g' -e 's/\.md$//g' -e 's/ /-/g'
+}
+
 function toPrimaryPost {
 	echo "$1" | sed 's/\.[a-z][a-z]\(\-[A-Z]\{2\}\)\?\.md$/.md/'
 }
