@@ -7,15 +7,17 @@ import globImport from 'rollup-plugin-glob-import'
 import visualizer from 'rollup-plugin-visualizer'
 
 export default {
-	entry: "material/js/main.js",
-	dest: "04_blog/js/bundle.min.js",
+	input: "material/js/main.js",
+	output: {
+		file: "04_blog/js/bundle.min.js",
+		name: "plutoblog",
+		format: "umd"
+	},
 	external: [
 		"process",
 		"DISQUS",
 		"DISQUS_SITE",
 	],
-	format: "umd",
-	moduleName: "plutoblog",
 	plugins: [
 		globImport(),
 		riot({ext: "tag.html"}),
