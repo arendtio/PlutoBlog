@@ -10,7 +10,7 @@
     "mem": "^4.0.0",
     "riot": "^3.6.1",
     "riot-route": "^3.1.2",
-    "showdown": "^1.7.1",
+    "showdown": "^1.9.1",
     "simple-intl": "^0.9.0",
     "velocity-animate": "^1.5.0"
   },
